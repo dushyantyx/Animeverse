@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <script src="app.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -36,26 +37,26 @@
                 </p>
             </header>
 
-            <section class="filter-section">
+            <section class="filter-section" id="top-filters">
                 <div class="filter-buttons">
-                    <button class="filter-btn active">All Time</button>
-                    <button class="filter-btn">Manga</button>
-                    <button class="filter-btn">Manhwa</button>
-                    <button class="filter-btn">Last Year</button>
-                    <button class="filter-btn">Completed</button>
+                    <button class="filter-btn active" data-filter="all">All Time</button>
+                    <button class="filter-btn" data-filter="manga">Manga</button>
+                    <button class="filter-btn" data-filter="manhwa">Manhwa</button>
+                    <button class="filter-btn" data-filter="last-year">Last Year</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
                 </div>
                 <div class="sort-options">
-                    <select class="sort-select">
-                        <option>Highest Rated</option>
-                        <option>Most Reviews</option>
-                        <option>Recently Added</option>
+                    <select class="sort-select" id="top-sort">
+                        <option value="rating">Highest Rated</option>
+                        <option value="reviews">Most Reviews</option>
+                        <option value="recent">Recently Added</option>
                     </select>
                 </div>
             </section>
 
             <!-- Top 3 Podium -->
             <section class="podium-section">
-                <div class="podium">
+                <div class="podium" id="top-podium">
                     <div class="podium-item second-place">
                         <div class="rank-medal silver">2</div>
                         <div class="podium-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/9/90/One_Piece%2C_Volume_61_Cover_%28Japanese%29.jpg');"></div>
@@ -108,6 +109,7 @@
             <!-- Detailed Rankings List -->
             <section class="rankings-list">
                 <h2>Complete Rankings</h2>
+                <div id="top-rankings"></div>
                 
                 <div class="ranking-item featured">
                     <div class="rank-number">4</div>

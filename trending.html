@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <script src="app.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -33,13 +34,13 @@
             <p>Here are the most popular titles this week.</p>
         </div>
 
-        <div class="trending-filters">
-            <button class="filter-btn active">This Week</button>
-            <button class="filter-btn">This Month</button>
-            <button class="filter-btn">All Time</button>
+        <div class="trending-filters" id="trending-filters">
+            <button class="filter-btn active" data-range="week">This Week</button>
+            <button class="filter-btn" data-range="month">This Month</button>
+            <button class="filter-btn" data-range="allTime">All Time</button>
         </div>
 
-        <div class="trending-grid">
+        <div class="trending-grid" id="trending-grid">
             <div class="trending-item rank-1">
                 <div class="rank-badge">#1</div>
                 <div class="manga-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg');"></div>
