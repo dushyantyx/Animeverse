@@ -1,21 +1,14 @@
-/*
-  MangaVerse - Client-side search prototype
-  - Hooks the header search input across all pages
-  - Redirects to search.html?q=...
-  - On the search page, fetches manga-data.json, filters client-side, and renders results
-*/
 (function () {
   const DATA_URL = 'manga-data.json';
   let DATA_CACHE = null;
 
-  // Utility shortcuts
+
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   function navigateToSearch(query) {
     const q = (query || '').trim();
-    if (!q) return; // ignore empty
-    // Always go to search.html from any page
+    if (!q) return; y
     const base = window.location.href.replace(/[^/]+$/, '');
     window.location.href = base + 'search.html?q=' + encodeURIComponent(q);
   }
@@ -110,9 +103,7 @@
   async function renderSearchPage() {
     const container = document.getElementById('results-grid');
     const header = document.getElementById('results-header');
-    if (!container) return; // not on search page
-
-    // Reflect query inside header search input if present
+    if (!container) return; 
     const { q } = parseQuery();
     const normalized = (q || '').trim();
     const searchInput = $('.search-input');
@@ -126,7 +117,6 @@
 
     const qLower = normalized.toLowerCase();
 
-    // Show a small loading state
     container.innerHTML = `<div class="loading">Searching for “${escapeHtml(normalized)}”...</div>`;
     try {
       const data = await fetchData();
@@ -161,7 +151,6 @@
       .replaceAll("'", '&#39;');
   }
 
-  // ---------- Trending Page ----------
   function attachTrendingHandlers() {
     const filters = $('#trending-filters');
     const grid = $('#trending-grid');
@@ -234,7 +223,7 @@
   }
 
 
-  // ---------- Top Rated Page ----------
+
   function attachTopRatedHandlers() {
     const filters = $('#top-filters');
     const sortSel = $('#top-sort');
@@ -364,12 +353,11 @@
     return div;
   }
 
-  // Init on every page
+
   document.addEventListener('DOMContentLoaded', () => {
     attachGlobalSearchHandlers();
     renderSearchPage();
     attachTrendingHandlers();
-    // Initial renders if present
     if (document.getElementById('trending-grid')) {
       const active = document.querySelector('#trending-filters .filter-btn.active');
       const range = active?.getAttribute('data-range') || 'week';
