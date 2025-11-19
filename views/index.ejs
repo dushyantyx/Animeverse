@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | MangaVerse</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <main class="main-content">
+    <%- include('partials/flash') %>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Welcome to <span class="gradient-text">MangaVerse</span></h1>
+          <p>Discover, discuss, and rate your favorite manga with our community</p>
+          <div class="hero-actions">
+            <a href="/manga" class="btn btn-primary btn-large">
+              <i class="fas fa-book"></i> Browse Manga
+            </a>
+            <a href="/discussions" class="btn btn-outline btn-large">
+              <i class="fas fa-comments"></i> Join Discussions
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2><i class="fas fa-star"></i> Top Rated Manga</h2>
+          <a href="/top-rated" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="manga-grid">
+          <% topRated.forEach(manga => { %>
+            <div class="manga-card">
+              <a href="/manga/<%= manga._id %>">
+                <div class="manga-cover">
+                  <img src="<%= manga.coverImage %>" alt="<%= manga.title %>">
+                  <div class="manga-overlay">
+                    <span class="manga-rating">
+                      <i class="fas fa-star"></i>
+                      <%= manga.averageRating.toFixed(1) %>
+                    </span>
+                  </div>
+                </div>
+                <div class="manga-info">
+                  <h3><%= manga.title %></h3>
+                  <p class="manga-author"><%= manga.author %></p>
+                  <div class="manga-meta">
+                    <span><i class="fas fa-eye"></i> <%= manga.viewCount %></span>
+                    <span><i class="fas fa-users"></i> <%= manga.ratingCount %> ratings</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Manga Section -->
+    <section class="section section-gray">
+      <div class="container">
+        <div class="section-header">
+          <h2><i class="fas fa-clock"></i> Recently Added</h2>
+          <a href="/manga" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="manga-grid">
+          <% recentManga.forEach(manga => { %>
+            <div class="manga-card">
+              <a href="/manga/<%= manga._id %>">
+                <div class="manga-cover">
+                  <img src="<%= manga.coverImage %>" alt="<%= manga.title %>">
+                  <div class="manga-overlay">
+                    <% if (manga.averageRating > 0) { %>
+                      <span class="manga-rating">
+                        <i class="fas fa-star"></i>
+                        <%= manga.averageRating.toFixed(1) %>
+                      </span>
+                    <% } %>
+                  </div>
+                </div>
+                <div class="manga-info">
+                  <h3><%= manga.title %></h3>
+                  <p class="manga-author"><%= manga.author %></p>
+                  <div class="manga-genres">
+                    <% manga.genres.slice(0, 2).forEach(genre => { %>
+                      <span class="genre-tag"><%= genre %></span>
+                    <% }) %>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <h3><%= recentManga.length %>+</h3>
+            <p>Manga Titles</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3>Active</h3>
+            <p>Community Discussions</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Growing</h3>
+            <p>User Community</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>Thousands</h3>
+            <p>of Ratings</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

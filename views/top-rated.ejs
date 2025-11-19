@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | MangaVerse</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <main class="main-content">
+    <%- include('partials/flash') %>
+    
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-trophy"></i> <%= title %></h1>
+        <p>Highest rated manga by our community</p>
+      </div>
+
+      <div class="manga-list">
+        <% manga.forEach((m) => { %>
+          <div class="manga-list-item">
+            <div class="manga-cover-small">
+              <img src="<%= m.coverImage %>" alt="<%= m.title %>">
+            </div>
+            <div class="manga-details">
+              <h3><a href="/manga/<%= m._id %>"><%= m.title %></a></h3>
+              <p class="manga-author">by <%= m.author %></p>
+              <p class="manga-description"><%= m.description.substring(0, 150) %>...</p>
+              <div class="manga-genres">
+                <% m.genres.forEach(genre => { %>
+                  <span class="genre-tag"><%= genre %></span>
+                <% }) %>
+              </div>
+            </div>
+            <div class="manga-stats">
+              <div class="rating-display large">
+                <div class="stars">
+                  <% for (let i = 1; i <= 5; i++) { %>
+                    <i class="fas fa-star <%= i <= m.averageRating ? 'active' : '' %>"></i>
+                  <% } %>
+                </div>
+                <span class="rating-value"><%= m.averageRating.toFixed(2) %></span>
+                <span class="rating-count">(<%= m.ratingCount %> ratings)</span>
+              </div>
+              <div class="view-count">
+                <i class="fas fa-eye"></i> <%= m.viewCount %> views
+              </div>
+              <a href="/manga/<%= m._id %>" class="btn btn-small">View Details</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <% if (manga.length === 0) { %>
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <h2>No rated manga yet</h2>
+          <p>Be the first to rate manga!</p>
+          <a href="/manga" class="btn btn-primary">Browse Manga</a>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

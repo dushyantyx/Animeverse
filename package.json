@@ -1,0 +1,27 @@
+{
+  "name": "mangaverse-fullstack",
+  "version": "1.0.0",
+  "description": "Full-stack manga discussion platform with ratings and threads",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "node config/seed.js"
+  },
+  "keywords": ["manga", "express", "mongodb", "ejs"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "mongoose": "^8.0.3",
+    "express-session": "^1.17.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "method-override": "^3.0.0",
+    "connect-flash": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

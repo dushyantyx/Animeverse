@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | MangaVerse</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <main class="main-content">
+    <%- include('partials/flash') %>
+    
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-search"></i> Search Results</h1>
+        <% if (query) { %>
+          <p>Results for "<strong><%= query %></strong>" - Found <%= results.length %> manga</p>
+        <% } else { %>
+          <p>Enter a search term to find manga</p>
+        <% } %>
+      </div>
+
+      <!-- Search Form -->
+      <form action="/search" method="GET" class="search-page-form">
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            name="q" 
+            value="<%= query %>" 
+            placeholder="Search by title, author, or genre..." 
+            class="search-input-large"
+            autofocus
+          >
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+          </button>
+        </div>
+      </form>
+
+      <% if (results.length > 0) { %>
+        <div class="manga-grid">
+          <% results.forEach(manga => { %>
+            <div class="manga-card">
+              <a href="/manga/<%= manga._id %>">
+                <div class="manga-cover">
+                  <img src="<%= manga.coverImage %>" alt="<%= manga.title %>">
+                  <div class="manga-overlay">
+                    <% if (manga.averageRating > 0) { %>
+                      <span class="manga-rating">
+                        <i class="fas fa-star"></i>
+                        <%= manga.averageRating.toFixed(1) %>
+                      </span>
+                    <% } %>
+                  </div>
+                </div>
+                <div class="manga-info">
+                  <h3><%= manga.title %></h3>
+                  <p class="manga-author"><%= manga.author %></p>
+                  <div class="manga-genres">
+                    <% manga.genres.slice(0, 2).forEach(genre => { %>
+                      <span class="genre-tag"><%= genre %></span>
+                    <% }) %>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% }) %>
+        </div>
+      <% } else if (query) { %>
+        <div class="empty-state">
+          <i class="fas fa-search"></i>
+          <h2>No results found</h2>
+          <p>Try searching with different keywords</p>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | MangaVerse</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    
+    <div class="container">
+      <!-- Manga Details Header -->
+      <div class="manga-detail-header">
+        <div class="manga-detail-cover">
+          <img src="<%= manga.coverImage %>" alt="<%= manga.title %>">
+        </div>
+        
+        <div class="manga-detail-info">
+          <h1><%= manga.title %></h1>
+          <p class="manga-author-large">
+            <i class="fas fa-pen"></i> by <%= manga.author %>
+          </p>
+          
+          <div class="manga-meta-large">
+            <span class="meta-item">
+              <i class="fas fa-circle-info"></i>
+              Status: <strong><%= manga.status %></strong>
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-book"></i>
+              Chapters: <strong><%= manga.chapters %></strong>
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-eye"></i>
+              Views: <strong><%= manga.viewCount %></strong>
+            </span>
+            <% if (manga.yearPublished) { %>
+              <span class="meta-item">
+                <i class="fas fa-calendar"></i>
+                Year: <strong><%= manga.yearPublished %></strong>
+              </span>
+            <% } %>
+          </div>
+
+          <div class="manga-genres-large">
+            <% manga.genres.forEach(genre => { %>
+              <span class="genre-tag-large"><%= genre %></span>
+            <% }) %>
+          </div>
+
+          <div class="rating-section">
+            <div class="current-rating">
+              <h3>Community Rating</h3>
+              <div class="rating-display-large">
+                <div class="stars-large">
+                  <% for (let i = 1; i <= 5; i++) { %>
+                    <i class="fas fa-star <%= i <= manga.averageRating ? 'active' : '' %>"></i>
+                  <% } %>
+                </div>
+                <div class="rating-text">
+                  <span class="rating-number"><%= manga.averageRating.toFixed(2) %></span>
+                  <span class="rating-count">(<%= manga.ratingCount %> ratings)</span>
+                </div>
+              </div>
+            </div>
+
+            <% if (currentUser) { %>
+              <div class="user-rating">
+                <h3>Your Rating</h3>
+                <form action="/manga/<%= manga._id %>/rate" method="POST" id="ratingForm">
+                  <div class="star-rating" id="starRating">
+                    <% for (let i = 1; i <= 5; i++) { %>
+                      <i 
+                        class="fas fa-star rating-star <%= i <= userRating ? 'selected' : '' %>" 
+                        data-rating="<%= i %>"
+                        onclick="setRating(<%= i %>)"
+                      ></i>
+                    <% } %>
+                  </div>
+                  <input type="hidden" name="rating" id="ratingInput" value="<%= userRating %>">
+                  <button type="submit" class="btn btn-primary" id="submitRating">
+                    <i class="fas fa-check"></i> Submit Rating
+                  </button>
+                </form>
+                <% if (userRating > 0) { %>
+                  <p class="current-user-rating">
+                    You rated this: <strong><%= userRating %> stars</strong>
+                  </p>
+                <% } %>
+              </div>
+            <% } else { %>
+              <div class="login-prompt">
+                <p><a href="/auth/login">Login</a> to rate this manga</p>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <section class="manga-section">
+        <h2><i class="fas fa-align-left"></i> Synopsis</h2>
+        <p class="manga-description"><%= manga.description %></p>
+      </section>
+
+      <!-- Discussions -->
+      <section class="manga-section">
+        <div class="section-header">
+          <h2><i class="fas fa-comments"></i> Discussions</h2>
+          <% if (currentUser) { %>
+            <a href="/discussions/create?manga=<%= manga._id %>" class="btn btn-primary">
+              <i class="fas fa-plus"></i> New Discussion
+            </a>
+          <% } %>
+        </div>
+
+        <% if (threads.length > 0) { %>
+          <div class="thread-list-preview">
+            <% threads.forEach(thread => { %>
+              <div class="thread-preview-item">
+                <div class="thread-preview-info">
+                  <h4><a href="/discussions/<%= thread._id %>"><%= thread.title %></a></h4>
+                  <p class="thread-meta">
+                    by <strong><%= thread.user.username %></strong> • 
+                    <%= new Date(thread.createdAt).toLocaleDateString() %> •
+                    <i class="fas fa-eye"></i> <%= thread.views %> views •
+                    <i class="fas fa-comment"></i> <%= thread.replies.length %> replies
+                  </p>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+          <a href="/discussions?manga=<%= manga._id %>" class="btn btn-outline">
+            View All Discussions <i class="fas fa-arrow-right"></i>
+          </a>
+        <% } else { %>
+          <div class="empty-state-small">
+            <p>No discussions yet. Be the first to start one!</p>
+            <% if (currentUser) { %>
+              <a href="/discussions/create?manga=<%= manga._id %>" class="btn btn-primary">
+                Start Discussion
+              </a>
+            <% } %>
+          </div>
+        <% } %>
+      </section>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+  <script src="/js/rating.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | MangaVerse</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  
+  <main class="main-content">
+    <%- include('partials/flash') %>
+    
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-fire"></i> <%= title %></h1>
+        <p>Most viewed and popular manga in the community</p>
+      </div>
+
+      <!-- Filter Options -->
+      <div class="filter-bar">
+        <a href="/trending?period=all" class="filter-btn <%= currentPeriod === 'all' ? 'active' : '' %>">All Time</a>
+        <a href="/trending?period=month" class="filter-btn <%= currentPeriod === 'month' ? 'active' : '' %>">This Month</a>
+        <a href="/trending?period=week" class="filter-btn <%= currentPeriod === 'week' ? 'active' : '' %>">This Week</a>
+      </div>
+
+      <div class="manga-grid" id="mangaGrid">
+        <% manga.forEach((m) => { %>
+          <div class="manga-card">
+            <a href="/manga/<%= m._id %>">
+              <div class="manga-cover">
+                <img src="<%= m.coverImage %>" alt="<%= m.title %>">
+                <div class="manga-overlay">
+                  <span class="manga-rating">
+                    <i class="fas fa-star"></i>
+                    <%= m.averageRating > 0 ? m.averageRating.toFixed(1) : 'N/A' %>
+                  </span>
+                </div>
+              </div>
+              <div class="manga-info">
+                <h3><%= m.title %></h3>
+                <p class="manga-author"><%= m.author %></p>
+                <div class="manga-meta">
+                  <span><i class="fas fa-eye"></i> <%= m.viewCount %></span>
+                  <span><i class="fas fa-fire"></i> Trending</span>
+                </div>
+                <div class="manga-genres">
+                  <% m.genres.slice(0, 3).forEach(genre => { %>
+                    <span class="genre-tag"><%= genre %></span>
+                  <% }) %>
+                </div>
+              </div>
+            </a>
+          </div>
+        <% }) %>
+      </div>
+
+      <% if (manga.length === 0) { %>
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <h2>No trending manga found</h2>
+          <p>Check back later for trending content!</p>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

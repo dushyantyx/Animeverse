@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | MangaVerse</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-comments"></i> <%= title %></h1>
+        <p>Join the conversation with fellow manga fans</p>
+      </div>
+
+      <div class="discussion-actions">
+        <% if (currentUser) { %>
+          <a href="/discussions/create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create New Discussion
+          </a>
+        <% } else { %>
+          <a href="/auth/login" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt"></i> Login to Create Discussion
+          </a>
+        <% } %>
+      </div>
+
+      <% if (threads.length > 0) { %>
+        <div class="thread-list">
+          <% threads.forEach(thread => { %>
+            <div class="thread-card">
+              <div class="thread-manga-info">
+                <img src="<%= thread.manga.coverImage %>" alt="<%= thread.manga.title %>">
+                <span><%= thread.manga.title %></span>
+              </div>
+              
+              <div class="thread-content">
+                <h3><a href="/discussions/<%= thread._id %>"><%= thread.title %></a></h3>
+                <p class="thread-excerpt"><%= thread.content.substring(0, 200) %>...</p>
+                
+                <div class="thread-meta">
+                  <span><i class="fas fa-user"></i> <%= thread.user.username %></span>
+                  <span><i class="fas fa-clock"></i> <%= new Date(thread.createdAt).toLocaleDateString() %></span>
+                  <span><i class="fas fa-eye"></i> <%= thread.views %> views</span>
+                  <span><i class="fas fa-comments"></i> <%= thread.replies.length %> replies</span>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-comments"></i>
+          <h2>No discussions yet</h2>
+          <p>Be the first to start a conversation!</p>
+          <% if (currentUser) { %>
+            <a href="/discussions/create" class="btn btn-primary">
+              Create Discussion
+            </a>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>
