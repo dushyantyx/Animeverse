@@ -2,8 +2,6 @@
 
 A full-stack web application for manga enthusiasts to discover, rate, and discuss their favorite manga series. Built with Node.js, Express, MongoDB, and EJS templating.
 
-> **🚨 New to the project?** See [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed setup instructions, especially for MongoDB configuration!
-
 ---
 
 ## 🎯 Project Overview
@@ -221,183 +219,34 @@ Animeverse/
 - **UPDATE**: Automatic `updatedAt` on new replies
 - **DELETE**: Thread deletion (`DELETE /discussions/:id`)
 
----
-
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- **Node.js** (v14 or higher)
-- **npm** or **yarn** package manager
-- **MongoDB** (Local installation OR free MongoDB Atlas account)
+- Node.js (v14+)
+- MongoDB (local installation)
+- npm
 
-### Quick Start (3 Options)
-
-#### 🌐 **Option A: MongoDB Atlas (Recommended for Easy Sharing)**
-
-**Best for:** Sharing with teammates, no local MongoDB installation needed
-
-1. **Clone Repository**
-   ```bash
-   git clone <repository-url>
-   cd Animeverse
-   ```
-
-2. **Create MongoDB Atlas Account** (FREE)
-   - Visit [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-   - Sign up for free account
-   - Create a new cluster (M0 Free tier)
-   - Click "Connect" → "Connect your application"
-   - Copy connection string (looks like: `mongodb+srv://username:password@cluster.mongodb.net/...`)
-
-3. **Configure Environment**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and update these lines:
-   ```env
-   MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/mangaverse?retryWrites=true&w=majority
-   SESSION_SECRET=your-random-secret-key-here
-   ```
-
-4. **Install & Run**
-   ```bash
-   npm install
-   npm run seed    # Populate database
-   npm start       # Start server
-   ```
-
-5. **Share with Others**
-   - They only need to clone repo and run `npm install`
-   - Share your MongoDB Atlas connection string (or create separate accounts)
-   - No MongoDB installation required! ✅
-
----
-
-#### 💻 **Option B: Local MongoDB**
-
-**Best for:** Offline development, full control
-
-1. **Install MongoDB**
-   - **Ubuntu/Debian:**
-     ```bash
-     sudo apt-get install -y mongodb-org
-     sudo systemctl start mongod
-     sudo systemctl enable mongod
-     ```
-   
-   - **macOS:**
-     ```bash
-     brew tap mongodb/brew
-     brew install mongodb-community
-     brew services start mongodb-community
-     ```
-   
-   - **Windows:**
-     Download from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
-
-2. **Clone & Setup**
-   ```bash
-   git clone <repository-url>
-   cd Animeverse
-   cp .env.example .env
-   ```
-
-3. **Verify MongoDB is Running**
-   ```bash
-   # Check if MongoDB is running
-   mongosh --eval "db.version()"
-   # or
-   sudo systemctl status mongod
-   ```
-
-4. **Install & Run**
-   ```bash
-   npm install
-   npm run seed
-   npm start
-   ```
-
-**⚠️ Note:** Others cloning your repo will need MongoDB installed locally too.
-
----
-
-#### 🐳 **Option C: Docker (Advanced)**
-
-**Best for:** Consistent environment across all machines
-
-1. **Clone Repository**
-   ```bash
-   git clone <repository-url>
-   cd Animeverse
-   ```
-
-2. **Create `docker-compose.yml`** (already provided if available, or create it):
-   ```yaml
-   version: '3.8'
-   services:
-     mongodb:
-       image: mongo:latest
-       ports:
-         - "27017:27017"
-       volumes:
-         - mongo-data:/data/db
-   
-   volumes:
-     mongo-data:
-   ```
-
-3. **Setup & Run**
-   ```bash
-   cp .env.example .env
-   docker-compose up -d  # Start MongoDB container
-   npm install
-   npm run seed
-   npm start
-   ```
-
-Anyone cloning just needs Docker installed - no MongoDB setup!
-
----
-
-### Environment Variables Explained
-
-Your `.env` file controls database connection:
-
-```env
-# Local MongoDB
-MONGODB_URI=mongodb://localhost:27017/mangaverse
-
-# Or MongoDB Atlas (cloud)
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/mangaverse
-
-# Required: Change this secret!
-SESSION_SECRET=your-random-secret-key-here
-```
-
-**Generate random secret:**
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
-
----
-
-### Step 5: Seed Database (Recommended)
-Populate the database with sample data:
+### Quick Setup
 
 ```bash
-node config/seed.js
+# 1. Install MongoDB (Ubuntu/Debian)
+sudo apt-get install -y mongodb-org
+sudo systemctl start mongod
+
+# 2. Clone and setup
+git clone <repo-url>
+cd Animeverse
+cp .env.example .env
+npm install
+
+# 3. Seed database
+npm run seed
+
+# 4. Start server
+npm start
 ```
 
-This will create:
-- 4 sample users (including admin)
-- 12 popular manga titles
-- Rating data
-- Discussion threads with replies
-
-**Test Credentials:**
-- Username: `admin`
-- Password: `admin123`
+Visit http://localhost:3000 (Login: admin/admin123)
 
 ### Step 6: Start Development Server
 ```bash

@@ -9,16 +9,20 @@ require('dotenv').config();
 
 const app = express();
 
+// Configuration with fallbacks for CodeSandbox/deployment
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mangaverse';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'mangaverse-dev-secret-' + Math.random().toString(36);
+const PORT = process.env.PORT || 3000;
+
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch(err => {
     console.error('❌ MongoDB connection error:', err.message);
     console.error('\n📝 Setup Help:');
-    console.error('   1. Check if MongoDB is running: sudo systemctl status mongod');
-    console.error('   2. Or use MongoDB Atlas (free cloud database)');
-    console.error('   3. See README.md for detailed setup instructions');
-    console.error('   4. Verify MONGODB_URI in .env file\n');
+    console.error('   1. Start MongoDB: sudo systemctl start mongod');
+    console.error('   2. Check status: sudo systemctl status mongod');
+    console.error('   3. Verify connection string in .env file\n');
     process.exit(1);
   });
 
@@ -34,7 +38,7 @@ app.use(methodOverride('_method'));
 
 // Session Configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 * 24 } // 24 hours
@@ -80,7 +84,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
