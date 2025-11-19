@@ -41,28 +41,28 @@
       </form>
 
       <% if (results.length > 0) { %>
-        <div class="manga-grid">
+        <div class="search-results">
           <% results.forEach(manga => { %>
-            <div class="manga-card">
-              <a href="/manga/<%= manga._id %>">
-                <div class="manga-cover">
+            <div class="search-result-card">
+              <a href="/manga/<%= manga._id %>" class="search-result-link">
+                <div class="search-result-image">
                   <img src="<%= manga.coverImage %>" alt="<%= manga.title %>">
-                  <div class="manga-overlay">
-                    <% if (manga.averageRating > 0) { %>
-                      <span class="manga-rating">
-                        <i class="fas fa-star"></i>
-                        <%= manga.averageRating.toFixed(1) %>
-                      </span>
-                    <% } %>
-                  </div>
+                  <% if (manga.averageRating > 0) { %>
+                    <span class="search-rating">
+                      <i class="fas fa-star"></i> <%= manga.averageRating.toFixed(1) %>
+                    </span>
+                  <% } %>
                 </div>
-                <div class="manga-info">
+                <div class="search-result-content">
                   <h3><%= manga.title %></h3>
-                  <p class="manga-author"><%= manga.author %></p>
-                  <div class="manga-genres">
-                    <% manga.genres.slice(0, 2).forEach(genre => { %>
-                      <span class="genre-tag"><%= genre %></span>
-                    <% }) %>
+                  <p class="search-author"><i class="fas fa-pen"></i> <%= manga.author %></p>
+                  <p class="search-description"><%= manga.description.replace(/<[^>]*>/g, '').substring(0, 150) %><%= manga.description.length > 150 ? '...' : '' %></p>
+                  <div class="search-meta">
+                    <span><i class="fas fa-book"></i> <%= manga.chapters %> chapters</span>
+                    <span><i class="fas fa-signal"></i> <%= manga.status %></span>
+                    <% if (manga.genres && manga.genres.length > 0) { %>
+                      <span><i class="fas fa-tags"></i> <%= manga.genres.slice(0, 2).join(', ') %></span>
+                    <% } %>
                   </div>
                 </div>
               </a>

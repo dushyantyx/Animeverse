@@ -54,46 +54,53 @@
           </div>
 
           <div class="rating-section">
-            <div class="current-rating">
-              <h3>Community Rating</h3>
-              <div class="rating-display-large">
-                <div class="stars-large">
-                  <% for (let i = 1; i <= 5; i++) { %>
-                    <i class="fas fa-star <%= i <= manga.averageRating ? 'active' : '' %>"></i>
-                  <% } %>
-                </div>
-                <div class="rating-text">
-                  <span class="rating-number"><%= manga.averageRating.toFixed(2) %></span>
-                  <span class="rating-count">(<%= manga.ratingCount %> ratings)</span>
-                </div>
-              </div>
-            </div>
-
-            <% if (currentUser) { %>
-              <div class="user-rating">
-                <h3>Your Rating</h3>
-                <form action="/manga/<%= manga._id %>/rate" method="POST" id="ratingForm">
-                  <div class="star-rating" data-user-rating="<%= userRating %>">
-                    <% for (let i = 1; i <= 5; i++) { %>
-                      <i class="fa-star rating-star <%= i <= userRating ? 'selected fa-solid' : 'fa-regular' %>" data-rating="<%= i %>"></i>
-                    <% } %>
+            <div class="rating-cards">
+              <div class="rating-card">
+                <h3><i class="fas fa-users"></i> Community Rating</h3>
+                <div class="rating-display-large">
+                  <div class="rating-score">
+                    <span class="rating-number"><%= manga.averageRating.toFixed(1) %></span>
+                    <div class="stars-large">
+                      <% for (let i = 1; i <= 5; i++) { %>
+                        <i class="fas fa-star <%= i <= Math.round(manga.averageRating) ? 'active' : '' %>"></i>
+                      <% } %>
+                    </div>
+                    <span class="rating-count"><%= manga.ratingCount %> rating<%= manga.ratingCount !== 1 ? 's' : '' %></span>
                   </div>
-                  <input type="hidden" name="rating" id="ratingInput" value="<%= userRating %>">
-                  <button type="submit" class="btn btn-primary" id="submitRating">
-                    <i class="fas fa-check"></i> Submit Rating
-                  </button>
-                </form>
-                <% if (userRating > 0) { %>
-                  <p class="current-user-rating">
-                    You rated this: <strong><%= userRating %> stars</strong>
-                  </p>
-                <% } %>
+                </div>
               </div>
-            <% } else { %>
-              <div class="login-prompt">
-                <p><a href="/auth/login">Login</a> to rate this manga</p>
-              </div>
-            <% } %>
+
+              <% if (currentUser) { %>
+                <div class="rating-card">
+                  <h3><i class="fas fa-star-half-stroke"></i> Your Rating</h3>
+                  <form action="/manga/<%= manga._id %>/rate" method="POST" id="ratingForm">
+                    <div class="rating-form-content">
+                      <select name="rating" id="rating" class="rating-select" required>
+                        <option value="" <%= userRating === 0 ? 'selected' : '' %>>Choose your rating...</option>
+                        <option value="1" <%= userRating === 1 ? 'selected' : '' %>>⭐ 1 Star - Poor</option>
+                        <option value="2" <%= userRating === 2 ? 'selected' : '' %>>⭐⭐ 2 Stars - Fair</option>
+                        <option value="3" <%= userRating === 3 ? 'selected' : '' %>>⭐⭐⭐ 3 Stars - Good</option>
+                        <option value="4" <%= userRating === 4 ? 'selected' : '' %>>⭐⭐⭐⭐ 4 Stars - Very Good</option>
+                        <option value="5" <%= userRating === 5 ? 'selected' : '' %>>⭐⭐⭐⭐⭐ 5 Stars - Excellent</option>
+                      </select>
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit
+                      </button>
+                    </div>
+                    <% if (userRating > 0) { %>
+                      <p class="current-user-rating">
+                        <i class="fas fa-check-circle"></i> You rated: <strong><%= userRating %> star<%= userRating !== 1 ? 's' : '' %></strong>
+                      </p>
+                    <% } %>
+                  </form>
+                </div>
+              <% } else { %>
+                <div class="rating-card login-card">
+                  <i class="fas fa-lock" style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                  <p><a href="/auth/login" class="btn btn-primary">Login to Rate</a></p>
+                </div>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>
@@ -151,6 +158,5 @@
   <%- include('../partials/footer') %>
   
   <script src="/js/main.js"></script>
-  <script src="/js/rating.js"></script>
 </body>
 </html>
