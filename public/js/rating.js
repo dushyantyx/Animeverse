@@ -16,49 +16,42 @@ function initStarRating() {
   ratingContainers.forEach(container => {
     const stars = container.querySelectorAll('.rating-star');
     const form = container.closest('form');
-    let currentRating = 0;
+    const ratingInput = form ? form.querySelector('input[name="rating"]') : null;
+    let currentRating = parseInt(container.dataset.userRating) || 0;
     
-    // Get existing rating if any
-    const existingRating = container.dataset.userRating;
-    if (existingRating) {
-      currentRating = parseInt(existingRating);
-      updateStars(stars, currentRating);
-    }
+    // Initialize stars display
+    updateStars(stars, currentRating);
     
-    // Add hover effects
+    // Add click handlers to each star
     stars.forEach((star, index) => {
       const ratingValue = index + 1;
       
-      // Mouse enter
-      star.addEventListener('mouseenter', function() {
+      // Mouse enter - preview rating
+      star.addEventListener('mouseenter', function(e) {
+        e.stopPropagation();
         updateStars(stars, ratingValue);
       });
       
-      // Click to rate
-      star.addEventListener('click', function() {
+      // Click to set rating
+      star.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         currentRating = ratingValue;
         updateStars(stars, currentRating);
         
-        // Update hidden input or submit directly
-        if (form) {
-          const ratingInput = form.querySelector('input[name="rating"]');
-          if (ratingInput) {
-            ratingInput.value = currentRating;
-          }
-          
-          // Auto-submit form (optional)
-          const autoSubmit = container.dataset.autoSubmit;
-          if (autoSubmit === 'true') {
-            submitRating(form, currentRating);
-          }
+        // Update hidden input
+        if (ratingInput) {
+          ratingInput.value = currentRating;
         }
         
         // Visual feedback
         showRatingFeedback(container, currentRating);
+        
+        console.log('Rating set to:', currentRating);
       });
     });
     
-    // Mouse leave - restore current rating
+    // Mouse leave container - restore current rating
     container.addEventListener('mouseleave', function() {
       updateStars(stars, currentRating);
     });

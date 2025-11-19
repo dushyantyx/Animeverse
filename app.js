@@ -12,7 +12,15 @@ const app = express();
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+  .catch(err => {
+    console.error('❌ MongoDB connection error:', err.message);
+    console.error('\n📝 Setup Help:');
+    console.error('   1. Check if MongoDB is running: sudo systemctl status mongod');
+    console.error('   2. Or use MongoDB Atlas (free cloud database)');
+    console.error('   3. See README.md for detailed setup instructions');
+    console.error('   4. Verify MONGODB_URI in .env file\n');
+    process.exit(1);
+  });
 
 // View Engine Setup (EJS)
 app.set('view engine', 'ejs');
@@ -51,7 +59,12 @@ app.use('/discussions', require('./routes/discussions'));
 
 // 404 Handler
 app.use((req, res) => {
-  res.status(404).render('404', { title: 'Page Not Found' });
+  res.status(404).render('404', { 
+    title: 'Page Not Found',
+    currentUser: req.session.user || null,
+    success: req.flash('success'),
+    error: req.flash('error')
+  });
 });
 
 // Error Handler
@@ -59,7 +72,10 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('error', { 
     title: 'Error', 
-    message: err.message 
+    message: err.message,
+    currentUser: req.session.user || null,
+    success: req.flash('success'),
+    error: req.flash('error')
   });
 });
 

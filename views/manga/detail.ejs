@@ -73,13 +73,9 @@
               <div class="user-rating">
                 <h3>Your Rating</h3>
                 <form action="/manga/<%= manga._id %>/rate" method="POST" id="ratingForm">
-                  <div class="star-rating" id="starRating">
+                  <div class="star-rating" data-user-rating="<%= userRating %>">
                     <% for (let i = 1; i <= 5; i++) { %>
-                      <i 
-                        class="fas fa-star rating-star <%= i <= userRating ? 'selected' : '' %>" 
-                        data-rating="<%= i %>"
-                        onclick="setRating(<%= i %>)"
-                      ></i>
+                      <i class="fa-star rating-star <%= i <= userRating ? 'selected fa-solid' : 'fa-regular' %>" data-rating="<%= i %>"></i>
                     <% } %>
                   </div>
                   <input type="hidden" name="rating" id="ratingInput" value="<%= userRating %>">
