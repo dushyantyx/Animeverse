@@ -16,7 +16,20 @@ const PORT = process.env.PORT || 3000;
 
 // Database Connection
 mongoose.connect(MONGODB_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
+  .then(async () => {
+    console.log('✅ Connected to MongoDB');
+    
+    // Auto-seed database if empty
+    const Manga = require('./models/Manga');
+    const mangaCount = await Manga.countDocuments();
+    
+    if (mangaCount === 0) {
+      console.log('📦 Database is empty, seeding initial data...');
+      const seedDatabase = require('./config/autoSeed');
+      await seedDatabase();
+      console.log('✅ Database seeded successfully');
+    }
+  })
   .catch(err => {
     console.error('❌ MongoDB connection error:', err.message);
     console.error('\n📝 Setup Help:');

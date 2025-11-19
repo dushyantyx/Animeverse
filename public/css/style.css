@@ -158,8 +158,7 @@ h3 { font-size:1.75rem; margin-bottom:1rem; }
 }
 .manga-card:hover { box-shadow:var(--shadow-lg); border-color:var(--accent); }
 .manga-cover { position:relative; height:420px; overflow:hidden; background:var(--bg-tertiary); }
-.manga-cover img { width:100%; height:100%; object-fit:cover; transition:var(--transition); }
-.manga-card:hover .manga-cover img { transform:scale(1.05); }
+.manga-cover img { width:100%; height:100%; object-fit:cover; }
 .manga-overlay {
   position:absolute; top:0; left:0; right:0; padding:1.25rem;
   display:flex; justify-content:space-between; align-items:flex-start;

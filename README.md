@@ -222,40 +222,139 @@ Animeverse/
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- Node.js (v14+)
-- MongoDB (local installation)
-- npm
+- **Node.js** (v14 or higher) - [Download](https://nodejs.org/)
+- **MongoDB** (local installation) - [Install Guide](https://www.mongodb.com/docs/manual/installation/)
+- **npm** (comes with Node.js)
 
-### Quick Setup
+### Step-by-Step Setup
 
+#### 1. Install MongoDB
+
+**Ubuntu/Debian:**
 ```bash
-# 1. Install MongoDB (Ubuntu/Debian)
 sudo apt-get install -y mongodb-org
-sudo systemctl start mongod
+sudo systemctl start mongodb
+sudo systemctl enable mongodb  # Auto-start on boot
+```
 
-# 2. Clone and setup
-git clone <repo-url>
+**macOS:**
+```bash
+brew tap mongodb/brew
+brew install mongodb-community
+brew services start mongodb-community
+```
+
+**Windows:**
+- Download installer from [MongoDB Download Center](https://www.mongodb.com/try/download/community)
+- Run installer and install as Windows Service
+
+**Verify MongoDB is running:**
+```bash
+# Check status
+sudo systemctl status mongodb  # Linux
+brew services list  # macOS
+
+# Or try connecting
+mongosh  # Should connect without errors
+```
+
+#### 2. Clone Repository
+```bash
+git clone <repository-url>
 cd Animeverse
-cp .env.example .env
+```
+
+#### 3. Install Dependencies
+```bash
 npm install
+```
 
-# 3. Seed database
+#### 4. Configure Environment
+```bash
+# Copy environment template
+cp .env.example .env
+
+# The default .env works for local setup, but you can customize:
+# - PORT (default: 3000)
+# - MONGODB_URI (default: mongodb://localhost:27017/mangaverse)
+# - SESSION_SECRET (change for production!)
+```
+
+#### 5. Seed Database
+```bash
 npm run seed
+```
 
-# 4. Start server
+This will create:
+- 4 sample users
+- 12 manga titles with Wikipedia cover images
+- Sample ratings and discussions
+
+**Test Login Credentials:**
+- Username: `admin`
+- Password: `admin123`
+
+#### 6. Start the Server
+
+**Development mode (with auto-reload):**
+```bash
+npm run dev
+```
+
+**Production mode:**
+```bash
 npm start
 ```
 
-Visit http://localhost:3000 (Login: admin/admin123)
+#### 7. Access the Application
 
-### Step 6: Start Development Server
+Open your browser and visit: **http://localhost:3000**
+
+---
+
+### 🚨 Common Setup Issues
+
+#### Issue: "MongoDB connection error"
+**Solution:**
 ```bash
-npm run dev
-# or
-nodemon app.js
+# Make sure MongoDB is running
+sudo systemctl start mongodb  # Linux
+brew services start mongodb-community  # macOS
+
+# Check if port 27017 is available
+netstat -an | grep 27017
 ```
 
-The application will be available at: **http://localhost:3000**
+#### Issue: "Port 3000 already in use"
+**Solution:**
+```bash
+# Kill existing process
+lsof -ti:3000 | xargs kill -9
+
+# Or change port in .env file
+PORT=3001
+```
+
+#### Issue: "npm install fails"
+**Solution:**
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Delete and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### Issue: "Seed script fails"
+**Solution:**
+```bash
+# Make sure MongoDB is running first
+sudo systemctl status mongodb
+
+# Clear database and re-seed
+npm run seed
+```
 
 ---
 

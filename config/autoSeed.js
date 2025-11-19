@@ -1,24 +1,13 @@
 // ========================================
-// MANGAVERSE - DATABASE SEED SCRIPT
-// Populate database with sample data
+// AUTO-SEED MODULE
+// Automatically seeds database on startup if empty
 // ========================================
 
-require('dotenv').config();
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-
 const User = require('../models/User');
 const Manga = require('../models/Manga');
 const Rating = require('../models/Rating');
 const Thread = require('../models/Thread');
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mangaverse')
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
-  });
 
 // ========================================
 // SAMPLE DATA
@@ -176,50 +165,25 @@ const sampleManga = [
 
 async function seedDatabase() {
   try {
-    console.log('🌱 Starting database seed...\n');
-    
-    // Clear existing data
-    await clearDatabase();
-    
     // Seed users
     const users = await seedUsers();
-    console.log(`✅ Created ${users.length} users\n`);
     
     // Seed manga
     const manga = await seedManga();
-    console.log(`✅ Created ${manga.length} manga\n`);
     
     // Seed ratings
     const ratings = await seedRatings(users, manga);
-    console.log(`✅ Created ${ratings.length} ratings\n`);
     
     // Update manga average ratings
     await updateMangaRatings(manga);
-    console.log(`✅ Updated manga ratings\n`);
     
     // Seed discussion threads
-    const threads = await seedThreads(users, manga);
-    console.log(`✅ Created ${threads.length} discussion threads\n`);
+    await seedThreads(users, manga);
     
-    console.log('🎉 Database seeding completed successfully!\n');
-    console.log('👤 Test Login Credentials:');
-    console.log('   Username: admin');
-    console.log('   Password: admin123\n');
-    
-    process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
-    process.exit(1);
+    console.error('❌ Error auto-seeding database:', error);
+    throw error;
   }
-}
-
-async function clearDatabase() {
-  console.log('🗑️  Clearing existing data...');
-  await User.deleteMany({});
-  await Manga.deleteMany({});
-  await Rating.deleteMany({});
-  await Thread.deleteMany({});
-  console.log('✅ Database cleared\n');
 }
 
 async function seedUsers() {
@@ -249,15 +213,12 @@ async function seedManga() {
 async function seedRatings(users, manga) {
   const ratings = [];
   
-  // Each user rates a random selection of manga
   for (const user of users) {
-    // Randomly select 5-8 manga to rate
     const numToRate = Math.floor(Math.random() * 4) + 5;
     const shuffledManga = [...manga].sort(() => 0.5 - Math.random());
     const mangaToRate = shuffledManga.slice(0, numToRate);
     
     for (const m of mangaToRate) {
-      // Random rating between 3 and 5
       const ratingValue = Math.floor(Math.random() * 3) + 3;
       
       const rating = new Rating({
@@ -284,9 +245,7 @@ async function updateMangaRatings(manga) {
       m.ratingCount = ratings.length;
     }
     
-    // Random view count between 100 and 5000
     m.viewCount = Math.floor(Math.random() * 4900) + 100;
-    
     await m.save();
   }
 }
@@ -317,7 +276,6 @@ async function seedThreads(users, manga) {
     }
   ];
   
-  // Create 2-3 threads per popular manga
   const popularManga = manga.slice(0, 8);
   
   for (const m of popularManga) {
@@ -337,7 +295,6 @@ async function seedThreads(users, manga) {
       
       await thread.save();
       
-      // Add 1-3 replies to each thread
       const numReplies = Math.floor(Math.random() * 3) + 1;
       for (let j = 0; j < numReplies; j++) {
         const replyUser = users[Math.floor(Math.random() * users.length)];
@@ -364,6 +321,6 @@ async function seedThreads(users, manga) {
 }
 
 // ========================================
-// RUN SEED
+// EXPORT
 // ========================================
-seedDatabase();
+module.exports = seedDatabase;
