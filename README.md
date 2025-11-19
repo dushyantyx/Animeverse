@@ -1,19 +1,50 @@
 # MangaVerse 📚
 
-A full-stack web application for manga enthusiasts to discover, rate, and discuss their favorite manga series. Built with Node.js, Express, MongoDB, and EJS templating.
+A minimalist full-stack manga discovery and discussion platform built with Node.js, Express, MongoDB, and EJS.
 
 ---
 
-## 🎯 Project Overview
+## 🎯 Overview
 
-**MangaVerse** is a comprehensive manga discussion platform that allows users to:
-- Browse and search for manga titles
-- Rate manga on a 5-star scale
+**MangaVerse** is a comprehensive manga platform featuring:
+- Browse and search manga with real-time filtering
+- Rate manga (1-5 stars) with auto-calculation
 - Create and participate in discussion threads
-- View trending and top-rated manga
-- Discover manga by genre, author, and status
+- Discover trending and top-rated manga
+- Auto-populated database on first startup
+- Minimalist Gruvbox UI with smooth animations
 
-This project was developed as a demonstration of full-stack web development skills, implementing RESTful APIs, database operations, user authentication, and dynamic content rendering.
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Node.js** (v14+) - [Download](https://nodejs.org/)
+- **MongoDB** (local) - [Install Guide](https://www.mongodb.com/docs/manual/installation/)
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/StupidAfCoder/Manga.git
+cd Manga
+
+# Install dependencies
+npm install
+
+# Start MongoDB
+sudo systemctl start mongodb  # Linux
+brew services start mongodb-community  # macOS
+
+# Start server (auto-seeds on first run)
+npm run dev
+```
+
+**Access:** http://localhost:3000
+
+**Test Login:**
+- Username: `admin`
+- Password: `admin123`
 
 ---
 
