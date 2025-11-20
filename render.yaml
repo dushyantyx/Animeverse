@@ -1,0 +1,22 @@
+services:
+  # Web Service
+  - type: web
+    name: mangaverse
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mangaverse-db
+          property: connectionString
+
+databases:
+  # MongoDB Database
+  - name: mangaverse-db
+    databaseName: mangaverse
+    user: mangaverse
